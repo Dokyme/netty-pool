@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <appender name="dev" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%d{yyyy/MM/dd HH:mm:ss.SSS} %magenta([%thread]) %boldYellow(%level) %cyan(%class{0}):\(line:%line\) %msg%n
+            </pattern>
+        </encoder>
+    </appender>
+
+    <!--关闭netty所有自带的日志输出-->
+    <logger name="io" level="ERROR"/>
+
+    <logger name="org" level="ERROR"/>
+
+    <logger name="com.zaxxer.hikari" level="ERROR"/>
+
+    <root level="DEBUG">
+        <appender-ref ref="dev"/>
+    </root>
+</configuration>
