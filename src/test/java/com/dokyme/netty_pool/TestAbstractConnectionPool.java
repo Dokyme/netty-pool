@@ -1,7 +1,9 @@
 package com.dokyme.netty_pool;
 
 import io.netty.bootstrap.Bootstrap;
-import io.netty.channel.*;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelInitializer;
+import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
@@ -24,14 +26,12 @@ public class TestAbstractConnectionPool {
     }
 
     public Bootstrap setupBootstrap() {
-        Bootstrap b = new Bootstrap();
-        b
+        Bootstrap b = new Bootstrap()
                 .channel(NioSocketChannel.class)
-                .option(ChannelOption.TCP_NODELAY, true)
                 .handler(new ChannelInitializer<SocketChannel>() {
                     @Override
                     public void initChannel(SocketChannel ch) throws Exception {
-                        ChannelPipeline p = ch.pipeline();
+
                     }
                 })
                 .remoteAddress(HOST, PORT);
@@ -41,7 +41,7 @@ public class TestAbstractConnectionPool {
     @Test
     public void testLeaseExceedCoreChannels() throws Exception {
         Bootstrap b = setupBootstrap();
-        ConnectionPool pool = new AbstractConnectionPool(10, 20, 5000, b);
+        ConnectionPool pool = ConnectionPools.newCachedConnectionPool(b);
         List<ChannelFuture> channelFutures = new ArrayList<>();
         for (int i = 0; i < 15; i++) {
             channelFutures.add(pool.lease());
